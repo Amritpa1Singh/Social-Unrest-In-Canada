@@ -25,6 +25,8 @@ library(tidyr)
 library(purrr)
 library(forecast)
 
+
+
 # ---- Loading Dataset----------------------------------------------------------
 data = read.csv("canadianProtestData.csv")
 head(data, n = 40) # Showing first few lines of the data
@@ -37,9 +39,9 @@ data$year <- as.factor(data$year )
 #Looking at the data and Summary
 print(paste("This dataset has", nrow(data), "entries"))
 
+
+
 #----Visualizing Data ----------------------------------------------------------
-
-
 # Number of Protests in each province 
 
 protests_by_province <- data.frame(matrix(0, ncol = 2, nrow = 13)) 
@@ -55,9 +57,7 @@ for (i in 1:13){
 }
 
 
-
 # Making the Bar Chart ( I am going a bit more fancy here :) )
-
 protests_by_province[,1] <- factor(
   protests_by_province[,1], 
   levels = protests_by_province[,1][order(protests_by_province[,2])])
@@ -123,6 +123,8 @@ plot_1 <- ggplot(protests_by_province) +
 
 plot_1
 
+
+
 # ---- Looking at numbers themselves--------------------------------------------
 
 # Number of no protests in different Months and Provinces
@@ -142,6 +144,8 @@ protest_mean <- mean(data$protests)
 protest_var <- var(data$protests)
 print(paste("the mean of number of protests is",
             protest_mean, "and the variance is", protest_var))
+
+
 
 # ----population and protest dispersion over whole of Canada--------------------
 province_pop <- data.frame(
@@ -166,6 +170,8 @@ plot((data$pop), data$protests, main = "Scatter Plot", xlab = "Population",
 plot(log(data$pop), data$protests, main = "Scatter Plot",
      xlab = "log(Population)", ylab = "Protests", col = "black", pch = 16)
 
+
+
 # -----Zero Inflated Negative Binomial Model------------------------------------
 # I am going to use province as the predictor for the zero part of the model due
 #to the case that some states just record a lot lower protests and closer to 0 
@@ -175,6 +181,8 @@ plot(log(data$pop), data$protests, main = "Scatter Plot",
 model <- zeroinfl(protests ~ data$year + data$month + log(data$pop)|  data$prov,
                   data=data, dist="negbin")
 summary(model)
+
+
 
 #---- Bootstrapping ------------------------------------------------------------
 boot_function <- function(data, indices) {
